@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Innmind\Async\TimeWarp;
 
 use Innmind\TimeWarp\{
-    Halt,
+    Halt as HaltInterface,
     PeriodToMilliseconds,
 };
 use Innmind\TimeContinuum\{
@@ -12,14 +12,14 @@ use Innmind\TimeContinuum\{
     Period,
     Earth\ElapsedPeriod,
 };
-use Innmind\Mantle\Suspend as Suspension;
+use Innmind\Mantle\Suspend;
 
-final class Suspend implements Halt
+final class Halt implements HaltInterface
 {
     private Clock $clock;
-    private Suspension $suspend;
+    private Suspend $suspend;
 
-    private function __construct(Clock $clock, Suspension $suspend)
+    private function __construct(Clock $clock, Suspend $suspend)
     {
         $this->clock = $clock;
         $this->suspend = $suspend;
@@ -35,7 +35,7 @@ final class Suspend implements Halt
         } while (!$this->clock->now()->elapsedSince($start)->longerThan($expected));
     }
 
-    public static function of(Clock $clock, Suspension $suspend): self
+    public static function of(Clock $clock, Suspend $suspend): self
     {
         return new self($clock, $suspend);
     }

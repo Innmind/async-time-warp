@@ -3,9 +3,9 @@ declare(strict_types = 1);
 
 namespace Tests\Innmind\Async\TimeWarp;
 
-use Innmind\Async\TimeWarp\Suspend;
+use Innmind\Async\TimeWarp\Halt;
 use Innmind\Mantle\{
-    Suspend as Suspension,
+    Suspend,
     Suspend\Synchronous,
 };
 use Innmind\TimeContinuum\Earth\{
@@ -18,14 +18,14 @@ class SuspendTest extends TestCase
 {
     public function testSuspend()
     {
-        $suspend = Suspend::of(
+        $halt = Halt::of(
             new Clock,
-            Suspension::of(new Clock, Synchronous::of()),
+            Suspend::of(new Clock, Synchronous::of()),
         );
 
         $start = \microtime(true);
 
-        $suspend(new Second(2));
+        $halt(new Second(2));
 
         $this->assertGreaterThanOrEqual(2, \microtime(true) - $start);
     }
